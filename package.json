@@ -1,6 +1,6 @@
 {
 	"name": "offload-fn",
-	"version": "0.0.0-development",
+	"version": "1.0.0",
 	"description": "Run a function in a Worker thread and get back a promise",
 	"license": "MIT",
 	"repository": "mstuart/offload-fn",
