@@ -1,0 +1,44 @@
+{
+	"name": "offload-fn",
+	"version": "0.0.0-development",
+	"description": "Run a function in a Worker thread and get back a promise",
+	"license": "MIT",
+	"repository": "mstuart/offload-fn",
+	"funding": "https://github.com/sponsors/mstuart",
+	"author": {
+		"name": "Mark Stuart",
+		"email": "mstuart@users.noreply.github.com",
+		"url": "https://github.com/mstuart"
+	},
+	"type": "module",
+	"exports": {
+		"types": "./index.d.ts",
+		"default": "./index.js"
+	},
+	"sideEffects": false,
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"test": "xo && ava && tsd"
+	},
+	"files": [
+		"index.js",
+		"index.d.ts"
+	],
+	"keywords": [
+		"worker",
+		"thread",
+		"offload",
+		"parallel",
+		"cpu",
+		"function",
+		"async",
+		"worker_threads"
+	],
+	"devDependencies": {
+		"ava": "^6.0.0",
+		"tsd": "^0.31.0",
+		"xo": "^0.60.0"
+	}
+}
