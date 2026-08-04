@@ -52,8 +52,8 @@ test('propagates errors', async t => {
 
 test('propagates error name', async t => {
 	const error = await t.throwsAsync(() => offloadFunction(() => {
-		const error = new TypeError('type mismatch');
-		throw error;
+		const typeError = new TypeError('type mismatch');
+		throw typeError;
 	}));
 	t.is(error.name, 'TypeError');
 });

@@ -1,5 +1,13 @@
 import {Worker} from 'node:worker_threads';
 
+class WorkerError extends Error {
+	constructor({message, name, stack}) {
+		super(message);
+		this.name = name;
+		this.stack = stack;
+	}
+}
+
 export default function offloadFunction(function_, ...arguments_) {
 	return new Promise((resolve, reject) => {
 		const workerCode = `
@@ -7,7 +15,7 @@ export default function offloadFunction(function_, ...arguments_) {
 			const fn = eval('(' + workerData.fn + ')');
 			Promise.resolve()
 				.then(() => fn(...workerData.args))
-				.then(result => parentPort.postMessage({result}))
+				.then(result => parentPort.postMessage({result: result}))
 				.catch(error => parentPort.postMessage({
 					error: {
 						message: error.message,
@@ -27,10 +35,7 @@ export default function offloadFunction(function_, ...arguments_) {
 
 		worker.on('message', message => {
 			if (message.error) {
-				const error = new Error(message.error.message);
-				error.name = message.error.name;
-				error.stack = message.error.stack;
-				reject(error);
+				reject(new WorkerError(message.error));
 			} else {
 				resolve(message.result);
 			}
