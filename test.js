@@ -86,7 +86,7 @@ test('returns a promise', t => {
 });
 
 test('handles function with no return value', async t => {
-	const result = await offloadFunction(() => {});
+	const result = await offloadFunction(() => undefined);
 	t.is(result, undefined);
 });
 
