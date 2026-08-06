@@ -1,7 +1,16 @@
-# offload-fn
+<div align="center">
+  <img src="docs/assets/logo.svg" alt="offload-fn — Run a function in a Worker thread and get back a promise" width="720">
+</div>
 
-> Run a function in a Worker thread and get back a promise
+<p align="center"><strong>Run a function in a Worker thread and get back a promise</strong></p>
 
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://www.npmjs.com/package/offload-fn"><img src="https://img.shields.io/npm/v/offload-fn?label=npm" alt="npm"></a>
+  <img src="https://img.shields.io/badge/node-%E2%89%A520-339933.svg" alt="Node 20+">
+</p>
+
+---
 ## Install
 
 ```sh
