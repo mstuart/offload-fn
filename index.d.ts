@@ -15,7 +15,10 @@ const result = await offloadFunction((a, b) => a + b, 2, 3);
 //=> 5
 ```
 */
-export default function offloadFunction<Arguments extends unknown[], ReturnType>(
-	function_: (...arguments_: Arguments) => ReturnType,
-	...arguments_: Arguments
+export default function offloadFunction<
+  Arguments extends unknown[],
+  ReturnType,
+>(
+  function_: (...arguments_: Arguments) => ReturnType,
+  ...arguments_: Arguments
 ): Promise<Awaited<ReturnType>>;
