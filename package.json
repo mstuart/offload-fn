@@ -1,47 +1,47 @@
 {
-	"name": "offload-fn",
-	"version": "1.0.0",
-	"description": "Run a function in a Worker thread and get back a promise",
-	"license": "MIT",
-	"repository": "mstuart/offload-fn",
-	"funding": "https://github.com/sponsors/mstuart",
-	"author": {
-		"name": "Mark Stuart",
-		"email": "mstuart@users.noreply.github.com",
-		"url": "https://github.com/mstuart"
-	},
-	"type": "module",
-	"exports": {
-		"types": "./index.d.ts",
-		"default": "./index.js"
-	},
-	"sideEffects": false,
-	"engines": {
-		"node": ">=22"
-	},
-	"scripts": {
-		"check": "ultracite check",
-		"fix": "ultracite fix",
-		"test": "ava && tsd"
-	},
-	"files": [
-		"index.js",
-		"index.d.ts"
-	],
-	"keywords": [
-		"worker",
-		"thread",
-		"offload",
-		"parallel",
-		"cpu",
-		"function",
-		"async",
-		"worker_threads"
-	],
-	"devDependencies": {
-		"@biomejs/biome": "2.5.6",
-		"ava": "^8.0.1",
-		"tsd": "^0.33.0",
-		"ultracite": "7.10.2"
-	}
+  "name": "offload-fn",
+  "version": "1.0.0",
+  "description": "Run a function in a Worker thread and get back a promise",
+  "keywords": [
+    "worker",
+    "thread",
+    "offload",
+    "parallel",
+    "cpu",
+    "function",
+    "async",
+    "worker_threads"
+  ],
+  "repository": "mstuart/offload-fn",
+  "funding": "https://github.com/sponsors/mstuart",
+  "license": "MIT",
+  "author": {
+    "name": "Mark Stuart",
+    "email": "mstuart@users.noreply.github.com",
+    "url": "https://github.com/mstuart"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    "types": "./index.d.ts",
+    "default": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "check": "ultracite check",
+    "fix": "ultracite fix",
+    "test": "ava && tsd"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.6",
+    "ava": "^8.0.1",
+    "tsd": "^0.33.0",
+    "ultracite": "7.10.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
 }

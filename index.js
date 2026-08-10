@@ -1,8 +1,8 @@
-import {Worker} from 'node:worker_threads';
+import { Worker } from "node:worker_threads";
 
 export default function offloadFunction(function_, ...arguments_) {
-	return new Promise((resolve, reject) => {
-		const workerCode = `
+  return new Promise((resolve, reject) => {
+    const workerCode = `
 			const {parentPort, workerData} = require('node:worker_threads');
 			const fn = eval('(' + workerData.fn + ')');
 			Promise.resolve()
@@ -17,30 +17,30 @@ export default function offloadFunction(function_, ...arguments_) {
 				}));
 		`;
 
-		const worker = new Worker(workerCode, {
-			eval: true,
-			workerData: {
-				fn: function_.toString(),
-				args: arguments_,
-			},
-		});
+    const worker = new Worker(workerCode, {
+      eval: true,
+      workerData: {
+        args: arguments_,
+        fn: function_.toString(),
+      },
+    });
 
-		worker.on('message', message => {
-			if (message.error) {
-				const error = new Error(message.error.message);
-				error.name = message.error.name;
-				error.stack = message.error.stack;
-				reject(error);
-			} else {
-				resolve(message.result);
-			}
+    worker.on("message", (message) => {
+      if (message.error) {
+        const error = new Error(message.error.message);
+        error.name = message.error.name;
+        error.stack = message.error.stack;
+        reject(error);
+      } else {
+        resolve(message.result);
+      }
 
-			worker.terminate();
-		});
+      worker.terminate();
+    });
 
-		worker.on('error', error => {
-			reject(error);
-			worker.terminate();
-		});
-	});
+    worker.on("error", (error) => {
+      reject(error);
+      worker.terminate();
+    });
+  });
 }
