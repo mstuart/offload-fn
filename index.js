@@ -24,8 +24,10 @@ export default function offloadFunction(function_, ...arguments_) {
         fn: function_.toString(),
       },
     });
+    let settled = false;
 
     worker.on("message", (message) => {
+      settled = true;
       if (message.error) {
         const error = new Error(message.error.message);
         error.name = message.error.name;
@@ -39,8 +41,18 @@ export default function offloadFunction(function_, ...arguments_) {
     });
 
     worker.on("error", (error) => {
+      settled = true;
       reject(error);
       worker.terminate();
+    });
+
+    worker.on("exit", (code) => {
+      if (!settled) {
+        settled = true;
+        reject(
+          new Error(`Worker exited before returning a result (code ${code})`)
+        );
+      }
     });
   });
 }
