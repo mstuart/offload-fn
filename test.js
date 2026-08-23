@@ -93,6 +93,15 @@ test("handles function with no return value", async (t) => {
   t.is(result, undefined);
 });
 
+test("rejects when the worker exits without returning a result", async (t) => {
+  await t.throwsAsync(
+    offloadFunction(() => globalThis.process.exit(0)),
+    {
+      message: "Worker exited before returning a result (code 0)",
+    }
+  );
+});
+
 test("handles nested object arguments", async (t) => {
   const result = await offloadFunction((object) => object.nested.value, {
     nested: { value: "deep" },
