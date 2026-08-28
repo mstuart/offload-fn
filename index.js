@@ -9,7 +9,15 @@ export default function offloadFunction(function_, ...arguments_) {
 				.then(() => fn(...workerData.args))
 				.then(result => parentPort.postMessage({result}))
 				.catch(error => parentPort.postMessage({
-					error: {
+						error: {
+							cause: (() => {
+								try {
+									const cause = error.cause;
+									return cause === undefined ? undefined : String(cause);
+								} catch {
+									return '[unserializable cause]';
+								}
+							})(),
 						message: error.message,
 						name: error.name,
 						stack: error.stack,
@@ -29,7 +37,10 @@ export default function offloadFunction(function_, ...arguments_) {
     worker.on("message", (message) => {
       settled = true;
       if (message.error) {
-        const error = new Error(message.error.message);
+        const error =
+          message.error.cause === undefined
+            ? new Error(message.error.message)
+            : new Error(message.error.message, { cause: message.error.cause });
         error.name = message.error.name;
         error.stack = message.error.stack;
         reject(error);

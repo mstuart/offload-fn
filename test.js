@@ -61,6 +61,50 @@ test("propagates error name", async (t) => {
   t.is(error.name, "TypeError");
 });
 
+test("propagates error cause context", async (t) => {
+  const error = await t.throwsAsync(() =>
+    offloadFunction(() => {
+      throw new Error("wrapper", { cause: new Error("root cause") });
+    })
+  );
+  t.is(error.cause, "Error: root cause");
+});
+
+test("preserves the original error when its cause cannot be converted", async (t) => {
+  const error = await t.throwsAsync(() =>
+    offloadFunction(() => {
+      throw new Error("wrapper", { cause: Object.create(null) });
+    })
+  );
+  t.is(error.message, "wrapper");
+  t.is(error.cause, "[unserializable cause]");
+});
+
+test("preserves the original error when reading its cause throws", async (t) => {
+  const error = await t.throwsAsync(() =>
+    offloadFunction(() => {
+      const workerError = new Error("wrapper");
+      Object.defineProperty(workerError, "cause", {
+        get() {
+          throw new Error("cause getter failed");
+        },
+      });
+      throw workerError;
+    })
+  );
+  t.is(error.message, "wrapper");
+  t.is(error.cause, "[unserializable cause]");
+});
+
+test("preserves the native cause property descriptor", async (t) => {
+  const error = await t.throwsAsync(() =>
+    offloadFunction(() => {
+      throw new Error("wrapper", { cause: "root cause" });
+    })
+  );
+  t.false(Object.getOwnPropertyDescriptor(error, "cause").enumerable);
+});
+
 test("handles CPU-intensive work", async (t) => {
   const result = await offloadFunction((n) => {
     let sum = 0;
