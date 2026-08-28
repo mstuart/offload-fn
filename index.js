@@ -9,7 +9,8 @@ export default function offloadFunction(function_, ...arguments_) {
 				.then(() => fn(...workerData.args))
 				.then(result => parentPort.postMessage({result}))
 				.catch(error => parentPort.postMessage({
-					error: {
+						error: {
+							cause: error.cause === undefined ? undefined : String(error.cause),
 						message: error.message,
 						name: error.name,
 						stack: error.stack,
@@ -30,6 +31,9 @@ export default function offloadFunction(function_, ...arguments_) {
       settled = true;
       if (message.error) {
         const error = new Error(message.error.message);
+        if (message.error.cause !== undefined) {
+          error.cause = message.error.cause;
+        }
         error.name = message.error.name;
         error.stack = message.error.stack;
         reject(error);

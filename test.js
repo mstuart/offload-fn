@@ -61,6 +61,15 @@ test("propagates error name", async (t) => {
   t.is(error.name, "TypeError");
 });
 
+test("propagates error cause context", async (t) => {
+  const error = await t.throwsAsync(() =>
+    offloadFunction(() => {
+      throw new Error("wrapper", { cause: new Error("root cause") });
+    })
+  );
+  t.is(error.cause, "Error: root cause");
+});
+
 test("handles CPU-intensive work", async (t) => {
   const result = await offloadFunction((n) => {
     let sum = 0;
