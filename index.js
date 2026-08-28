@@ -11,9 +11,9 @@ export default function offloadFunction(function_, ...arguments_) {
 				.catch(error => parentPort.postMessage({
 						error: {
 							cause: (() => {
-								if (error.cause === undefined) return undefined;
 								try {
-									return String(error.cause);
+									const cause = error.cause;
+									return cause === undefined ? undefined : String(cause);
 								} catch {
 									return '[unserializable cause]';
 								}
@@ -37,10 +37,10 @@ export default function offloadFunction(function_, ...arguments_) {
     worker.on("message", (message) => {
       settled = true;
       if (message.error) {
-        const error = new Error(message.error.message);
-        if (message.error.cause !== undefined) {
-          error.cause = message.error.cause;
-        }
+        const error =
+          message.error.cause === undefined
+            ? new Error(message.error.message)
+            : new Error(message.error.message, { cause: message.error.cause });
         error.name = message.error.name;
         error.stack = message.error.stack;
         reject(error);
