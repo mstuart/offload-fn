@@ -70,6 +70,16 @@ test("propagates error cause context", async (t) => {
   t.is(error.cause, "Error: root cause");
 });
 
+test("preserves the original error when its cause cannot be converted", async (t) => {
+  const error = await t.throwsAsync(() =>
+    offloadFunction(() => {
+      throw new Error("wrapper", { cause: Object.create(null) });
+    })
+  );
+  t.is(error.message, "wrapper");
+  t.is(error.cause, "[unserializable cause]");
+});
+
 test("handles CPU-intensive work", async (t) => {
   const result = await offloadFunction((n) => {
     let sum = 0;

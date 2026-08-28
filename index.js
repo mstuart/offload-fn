@@ -10,7 +10,14 @@ export default function offloadFunction(function_, ...arguments_) {
 				.then(result => parentPort.postMessage({result}))
 				.catch(error => parentPort.postMessage({
 						error: {
-							cause: error.cause === undefined ? undefined : String(error.cause),
+							cause: (() => {
+								if (error.cause === undefined) return undefined;
+								try {
+									return String(error.cause);
+								} catch {
+									return '[unserializable cause]';
+								}
+							})(),
 						message: error.message,
 						name: error.name,
 						stack: error.stack,
