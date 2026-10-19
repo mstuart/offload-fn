@@ -8,7 +8,12 @@ export default function offloadFunction(function_, ...arguments_) {
 			Promise.resolve()
 				.then(() => fn(...workerData.args))
 				.then(result => parentPort.postMessage({result}))
-				.catch(error => parentPort.postMessage({
+				.catch(thrown => {
+					let error = thrown;
+					if (error === null || (typeof error !== 'object' && typeof error !== 'function')) {
+						error = new Error(String(thrown));
+					}
+					parentPort.postMessage({
 						error: {
 							cause: (() => {
 								try {
@@ -22,7 +27,8 @@ export default function offloadFunction(function_, ...arguments_) {
 						name: error.name,
 						stack: error.stack,
 					},
-				}));
+					});
+				});
 		`;
 
     const worker = new Worker(workerCode, {
